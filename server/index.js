@@ -4,6 +4,8 @@ var snowflake = require('snowflake-sdk');
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const fetch = require('node-fetch');
+var Pokedex = require('pokedex')
+
 
 const port = 4001
 
@@ -34,13 +36,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.get('/api/get/:name', (req, res) => {
-    // console.log(req.params.name)
-    const pokemon = req.params.name
-    fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`).then((data) => {
-        data.json()
-    }).then((json) => {
-        console.log(json)
-    })
+    const name = req.params.name
+    pokedex = new Pokedex();
+    
+    res.send(pokedex.pokemon(name))
 })
 
 app.post('/api/insert', (req, res) => {
