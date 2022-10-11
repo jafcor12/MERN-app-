@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Axios from 'axios'
 import './movies.css'
 
 
 function Movies() {
+
     const [movie, setMovie] = useState('');
     const [review, setReview] = useState('');
     const [pokemon, setPokemon] = useState([]);
     const [pokInfo, setPokInfo] = useState({})
+    const [list, setList] = useState()
     const [src, setSrc] = useState('http://img.pokemondb.net/sprites/black-white/normal/bulbasaur.png');
+
+    useEffect(() => {
+        Axios.get('http://localhost:4001/api/list').then((response) => {
+             setList(response.data);
+        });
+    }, [list]);
 
     const showPokemon = () => {
         Axios.get(`http://localhost:4001/api/get/${pokemon}`).then((response) => {
@@ -18,6 +26,8 @@ function Movies() {
             console.log(data)
             setSrc(data.sprites.normal)
         })
+
+        console.log(list ? true : false)
     }
 
     const submitReview = () => {
@@ -61,7 +71,9 @@ function Movies() {
                 onChange={(e) => setPokemon(e.target.value)} />
             <button onClick={showPokemon}>Pokemon</button>
             <h1>{pokInfo.base_experience}</h1>
-            <img alt='hola' src={src}/>
+            <img alt='hola' src={src} />
+            {list?.map((val) =>
+                <img key={val.id} src={val.sprites.normal} alt={`Pokemons ${val.name}`} />)}
 
         </div>
     )

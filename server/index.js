@@ -42,6 +42,11 @@ app.get('/api/get/:name', (req, res) => {
     res.send(pokedex.pokemon(name))
 })
 
+app.get('/api/list', (req, res) => {
+    pokedex = new Pokedex()
+    res.send(pokedex.pokemon())
+})
+
 app.post('/api/insert', (req, res) => {
 
     var movieName = req.body.movieName;
